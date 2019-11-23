@@ -17,8 +17,12 @@ class User(db.Model, UserMixin):
 	posts = db.relationship('Post', backref='author', lazy=True)
 	place = db.Column(db.String(20))
 	type = db.Column(db.String(20), nullable=False)
-	scor = db.Column(db.Integer)
-
+	scor = db.Column(db.Integer, default=0)
+	post_no = db.Column(db.Integer, default=0)
+	post_acc = db.Column(db.Integer, default=0)
+	post_compl = db.Column(db.Integer, default=0)
+	doc_up = db.Column(db.Integer, default=0)
+	docs = db.Column(db.String(20), nullable=True)
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
