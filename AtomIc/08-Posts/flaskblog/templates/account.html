@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content1 %}
-	<img src="../static/imgs/hug1.png">
+	<!--<img src="../static/imgs/hug1.png">-->
 {% endblock content1 %}
 
 
@@ -12,7 +12,7 @@
           <h2 class="account-heading">{{ current_user.username }}</h2>
           <p class="text-secondary">{{ current_user.email }}</p>
           <p class="text-secondary">{{ current_user.type }}</p>
-		  <p class="text-secondary">Badges: {{ current_user.scor }}</p>
+		  <p class="text-secondary">Trust level: {{ current_user.scor }}</p>
 
         </div>
       </div>
