@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block content1 %}
 <!--
 <body onload="initMap()">
 <div class="container">
@@ -28,64 +28,51 @@
 
 
 -->
-{% endblock content %}
+{% endblock content1 %}
 
-{% block content1 %}
+{% block content %}
 <div class="content-section">
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">{{ legend }}</legend>
             <div class="form-group">
-                {{ form.sum.label(class="form-control-label") }}
-                {% if form.sum.errors %}
-                    {{ form.sum(class="form-control form-control-lg is-invalid") }}
+                {{ form.title.label(class="form-control-label") }}
+                {% if form.title.errors %}
+                    {{ form.title(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.sum.errors %}
+                        {% for error in form.title.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.sum(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-			<div class="form-group">
-                {{ form.interest.label(class="form-control-label") }}
-                {% if form.interest.errors %}
-                    {{ form.interest(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.interest.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.interest(class="form-control form-control-lg") }}
+                    {{ form.title(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.payDate.label(class="form-control-label") }}
-                {% if form.payDate.errors %}
-                    {{ form.payDate(class="form-control form-control-lg is-invalid") }}
+                {{ form.date.label(class="form-control-label") }}
+                {% if form.date.errors %}
+                    {{ form.date(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.payDate.errors %}
+                        {% for error in form.date.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.payDate(class="form-control form-control-lg") }}
+                    {{ form.date(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.description.label(class="form-control-label") }}
-                {% if form.description.errors %}
-                    {{ form.description(class="form-control form-control-lg is-invalid") }}
+                {{ form.content.label(class="form-control-label") }}
+                {% if form.content.errors %}
+                    {{ form.content(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.description.errors %}
+                        {% for error in form.content.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.description(class="form-control form-control-lg") }}
+                    {{ form.content(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
         </fieldset>
@@ -94,4 +81,4 @@
         </div>
     </form>
 </div>
-{% endblock content1 %}
+{% endblock content %}
