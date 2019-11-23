@@ -22,7 +22,43 @@ h1, h2, h3, h4, h5, h6 {
 	margin-right: 0;
 	width: 50%;
 	align: left;
-	
+}
+.paydate{
+	padding-top:10px;
+	display:inline;
+	font-size:18px;
+	color: #444444;
+	float:right;
+}
+.description{
+	border: 1px dotted  gray;
+}
+
+.interest{
+	width:100%;
+	float:left;
+	padding-top:10px;
+	font-size:15px;
+	color: #444444;
+	padding-left:2px;
+}
+.interest-second{
+	display:inline;
+	font-size:20px;
+	color: #444444;
+	float:right;
+}
+.sum-second{
+	display:inline;
+	font-size:20px;
+	float:left;
+	color: #444444;
+}
+.sum{
+	display:inline;
+	font-size:30px;
+	float:left;
+	color: #444444;
 }
 .site-header .navbar-nav .nav-link {
   color: #505050;
