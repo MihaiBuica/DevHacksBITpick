@@ -11,7 +11,22 @@ from flask import Flask
 from flask import request, render_template, jsonify
 import json
 
-
+# type 0 = document updatat
+# type 1 = plata completata
+# type 2 = bani ceruti
+# type 3 = postari totale
+def calculate_score(type):
+	if type is 0:
+		calculated_value = 20
+	elif type is 1:
+		calculated_value = 10
+	elif type is 2:
+		calculated_value = 0
+	elif type is 3:
+		calculated_value = -5
+		
+	return calculated_value
+	
 @app.route("/")
 @app.route("/home")
 def home():
@@ -45,12 +60,14 @@ def preregister():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		user = User(username=form.username.data, email=form.email.data, password=hashed_password, type=form.type.data, place=form.place.data, scor=10)
+		user = User(username=form.username.data, email=form.email.data, password=hashed_password, type=form.type.data, place=form.place.data, scor=10, post_no=0, post_acc=0, post_compl=0, doc_up=0)
 		db.session.add(user)
 		db.session.commit()
 		flash('Your account has been created! You are now able to log in', 'success')
 		return redirect(url_for('login'))
 	return render_template('preregister.html', title='Register', form=form)
+	
+	
 	
 	
 @app.route("/register", methods=['GET', 'POST'])
@@ -114,6 +131,12 @@ def account():
 			current_user.image_file = picture_file
 		current_user.username = form.username.data
 		current_user.email = form.email.data
+		current_user.document = form.document.data
+		val = 0
+		if current_user.document:
+			current_user.doc_up += 1
+			val = calculate_score(0)
+		current_user.scor += val
 		db.session.commit()
 		flash('Your account has been updated!', 'success')
 		return redirect(url_for('account'))
@@ -123,6 +146,7 @@ def account():
 	image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 	return render_template('account.html', title='Account',
 						   image_file=image_file, form=form)
+
 
 def addJSON(title,desc,date):
 
@@ -139,20 +163,30 @@ def addJSON(title,desc,date):
 def new_post():
 	form = PostForm()
 	if form.validate_on_submit():
-		post = Post(sum=form.sum.data, payDate=form.payDate.data, author=current_user, interest=form.interest.data, description=form.description.data)		
-		#addJSON(form.sum.data, form.interest.data, form.payDate.data)
+		post = Post(title=form.title.data, content=form.content.data, author=current_user, date=form.date.data)		
+		addJSON(form.title.data, form.content.data, form.date.data)
 		db.session.add(post)
-		db.session.commit()
-		flash('Your post has been created!', 'success')
+		current_user.post_no += 1
+		if current_user.scor is 0:
+			flash('Your score is 0. We do not trust you. Change something in your life ;)', 'error')
+			return redirect(url_for('home'))
+		elif current_user.post_no is 4:
+			flash('Your have more than 3 posts. Cataua achita datoriiaaa', 'error')
+			return redirect(url_for('home'))
+		else:
+			val = calculate_score(3)
+			current_user.scor += val
+			db.session.commit()
+			flash('Your post has been created!', 'success')
 		return redirect(url_for('home'))
-	return render_template('create_post.html', title='New demand',
-						   form=form, legend='New demand')
+	return render_template('create_post.html', title='New Post',
+						   form=form, legend='New Post')
 
 
 @app.route("/post/<int:post_id>")
 def post(post_id):
 	post = Post.query.get_or_404(post_id)
-	return render_template('post.html', title=post.sum, post=post)
+	return render_template('post.html', title=post.title, post=post)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -184,5 +218,5 @@ def delete_post(post_id):
 		abort(403)
 	db.session.delete(post)
 	db.session.commit()
-	flash('Payment has been transfered!', 'success')
+	flash('Your post has been deleted!', 'success')
 	return redirect(url_for('home'))

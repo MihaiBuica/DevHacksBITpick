@@ -18,10 +18,8 @@
 			  <a class="mr-2" href="#">{{ post.author.username }}</a>
 			  <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
 			</div>
-			<div class="sum"><a class="article-sum" href="{{ url_for('post', post_id=post.id) }}"><strong>{{ post.sum }} lei</strong>	</a></div>
-			<div class="paydate"> <i>paydate: {{post.payDate}}</i></div>
-			<br>
-			<div class="interest"> <strong> INTEREST:{{post.interest}}% </strong></div>
+			<h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+			<p class="article-content">{{ post.content }}</p>
 		  </div>
 		</article>
 		{% endfor %}
@@ -30,7 +28,7 @@
 {% block content %}	
             <h3>Menu</h3>
               <ul class="list-group">
-				<li class="list-group-item list-group-item-light"><font color="red">WASTE ALERT!</font></li>
-                <li class="list-group-item list-group-item-light"><a href="post_id">Map</a></li>
+				<li class="list-group-item list-group-item-light"><font color="red">I WANT MONEY NOW!</font></li>
+                <li class="list-group-item list-group-item-light"><a href="post_id">The coolest Features</a></li>
               </ul>
 {% endblock content %}
