@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
-{% block content1 %}
-	<img src="../static/imgs/gif1.gif">
-
-
-{% endblock content1 %}
-
 {% block content %}
+	<!--<img src="../static/imgs/gif1.gif">-->
+
+
+{% endblock content %}
+
+{% block content1 %}
     <div class="content-section">
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
+                <legend class="border-bottom mb-4">TJoin Today</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
 
@@ -86,4 +86,4 @@
             Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
         </small>
     </div>
-{% endblock content %}
+{% endblock content1 %}

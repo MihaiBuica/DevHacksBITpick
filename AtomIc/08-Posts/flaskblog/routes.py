@@ -24,11 +24,6 @@ def about():
 	return render_template('about.html', title='About')
 
 
-@app.route('/calendar')
-def calendar():
-    return render_template("json.html")
-
-
 @app.route('/data')
 def return_data():
     start_date = request.args.get('start', '')
@@ -43,7 +38,21 @@ def return_data():
         # check out jsonfiy method or the built in json module
         return input_data.read()
 
-
+@app.route("/preregister", methods=['GET', 'POST'])
+def preregister():
+	if current_user.is_authenticated:
+		return redirect(url_for('home'))
+	form = RegistrationForm()
+	if form.validate_on_submit():
+		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+		user = User(username=form.username.data, email=form.email.data, password=hashed_password, type=form.type.data, place=form.place.data, scor=10)
+		db.session.add(user)
+		db.session.commit()
+		flash('Your account has been created! You are now able to log in', 'success')
+		return redirect(url_for('login'))
+	return render_template('preregister.html', title='Register', form=form)
+	
+	
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
@@ -51,7 +60,7 @@ def register():
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		user = User(username=form.username.data, email=form.email.data, password=hashed_password, type=form.type.data, place=form.place.data)
+		user = User(username=form.username.data, email=form.email.data, password=hashed_password, type=form.type.data, place=form.place.data, scor=10)
 		db.session.add(user)
 		db.session.commit()
 		flash('Your account has been created! You are now able to log in', 'success')
@@ -130,20 +139,20 @@ def addJSON(title,desc,date):
 def new_post():
 	form = PostForm()
 	if form.validate_on_submit():
-		post = Post(title=form.title.data, content=form.content.data, author=current_user, date=form.date.data)		
-		addJSON(form.title.data, form.content.data, form.date.data)
+		post = Post(sum=form.sum.data, payDate=form.payDate.data, author=current_user, interest=form.interest.data, description=form.description.data)		
+		#addJSON(form.sum.data, form.interest.data, form.payDate.data)
 		db.session.add(post)
 		db.session.commit()
 		flash('Your post has been created!', 'success')
 		return redirect(url_for('home'))
-	return render_template('create_post.html', title='New Post',
-						   form=form, legend='New Post')
+	return render_template('create_post.html', title='New demand',
+						   form=form, legend='New demand')
 
 
 @app.route("/post/<int:post_id>")
 def post(post_id):
 	post = Post.query.get_or_404(post_id)
-	return render_template('post.html', title=post.title, post=post)
+	return render_template('post.html', title=post.sum, post=post)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -175,5 +184,5 @@ def delete_post(post_id):
 		abort(403)
 	db.session.delete(post)
 	db.session.commit()
-	flash('Your post has been deleted!', 'success')
+	flash('Payment has been transfered!', 'success')
 	return redirect(url_for('home'))
