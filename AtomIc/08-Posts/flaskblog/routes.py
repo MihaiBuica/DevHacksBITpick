@@ -4,11 +4,13 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from flaskblog.forms import ClientInvestorButton
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
 from flask import Flask
 from flask import request, render_template, jsonify
+
 import json
 
 # type 0 = document updatat
@@ -16,16 +18,19 @@ import json
 # type 2 = bani ceruti
 # type 3 = postari totale
 def calculate_score(type):
-	if type is 0:
+	if type == 0:
 		calculated_value = 20
-	elif type is 1:
+	elif type == 1:
 		calculated_value = 10
-	elif type is 2:
+	elif type == 2:
 		calculated_value = 0
-	elif type is 3:
+	elif type == 3:
 		calculated_value = -5
 		
 	return calculated_value
+	
+def calculate_interest_sum(interest, sum):
+	return sum*interest/100.0;
 	
 
 @app.route("/")
@@ -56,17 +61,31 @@ def return_data():
 	
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+	type = request.args['type']  # counterpart for url_for()
 	if current_user.is_authenticated:
 		return redirect(url_for('home'))
 	form = RegistrationForm()
 	if form.validate_on_submit():
 		hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-		user = User(username=form.username.data, email=form.email.data, password=hashed_password, type=form.type.data, place=form.place.data)
+		user = User(username=form.username.data, email=form.email.data, password=hashed_password, type=type, place=form.place.data)
 		db.session.add(user)
 		db.session.commit()
 		flash('Your account has been created! You are now able to log in', 'success')
 		return redirect(url_for('login'))
-	return render_template('register.html', title='Register', form=form)
+	return render_template('register.html', title='Register', form=form, type=type)
+
+	
+@app.route("/prereg", methods=['GET', 'POST'])
+def prereg():
+	if current_user.is_authenticated:
+		return redirect(url_for('home'))
+	form = ClientInvestorButton()
+	if form.validate_on_submit():
+		if form.investor.data:
+			return redirect(url_for('register', type='n Investor'))
+		if form.client.data:
+			return redirect(url_for('register', type=' Client'))
+	return render_template('prereg.html', title='Registration', form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
