@@ -1,0 +1,29 @@
+[
+  {
+    "title": "All Day Event",
+    "desc": "Descriere1",
+    "start": "2019-04-01"
+  },
+  {
+    "title": "Event",
+	"desc": "Descriere1",
+    "start": "2019-04-03"
+  },
+  {
+    "title": "Repeating Event",
+	    "desc": "Descriere1",
+    "start": "2014-09-16"
+  }
+],{
+"title":"Mircea cel batran",
+"desc":"salut dragi tovarasi",
+"start":"2019-04-05"
+}],{
+"title":"Clean up",
+"desc":"Cleanup Fest ",
+"start":"after party"
+},{
+"title":"Am inceput",
+"desc":"buna",
+"start":"1asd"
+}]
