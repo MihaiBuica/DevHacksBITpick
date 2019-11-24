@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 {% block content1 %}
-	<img src="../static/imgs/hug1.png">
+	<!--<img src="../static/imgs/hug1.png">-->
+          <p class="text-secondary">Doc updated: {{ current_user.doc_up }}</p>
+		  <p class="text-secondary"> Post number: {{ current_user.post_no }}</p>
+		  <p class="text-secondary"> Post accepted: {{ current_user.post_acc }}</p>
+		  <p class="text-secondary"> Post completed: {{ current_user.post_compl }}</p>
 {% endblock content1 %}
 
 
@@ -12,7 +16,7 @@
           <h2 class="account-heading">{{ current_user.username }}</h2>
           <p class="text-secondary">{{ current_user.email }}</p>
           <p class="text-secondary">{{ current_user.type }}</p>
-		  <p class="text-secondary">Badges: {{ current_user.scor }}</p>
+		  <p class="text-secondary">Trust level: {{ current_user.scor }}</p>
 
         </div>
       </div>
@@ -52,6 +56,15 @@
                     {{ form.picture(class="form-control-file") }}
                     {% if form.picture.errors %}
                         {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+				<div class="form-group">
+                    {{ form.document.label() }}
+                    {{ form.document(class="form-control-file") }}
+                    {% if form.document.errors %}
+                        {% for error in form.document.errors %}
                             <span class="text-danger">{{ error }}</span></br>
                         {% endfor %}
                     {% endif %}

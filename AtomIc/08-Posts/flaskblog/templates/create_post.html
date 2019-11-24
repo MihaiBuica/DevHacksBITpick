@@ -1,10 +1,12 @@
 {% extends "layout.html" %}
-{% block content1 %}
+{% block content %}
+<!--
 <body onload="initMap()">
 <div class="container">
     <div id="map" style="width:100%; height:500px;"></div>
 </div>
 </body><div id="map"></div>
+	
     <script>
 
       function initMap() {
@@ -25,52 +27,65 @@
     </script>
 
 
+-->
+{% endblock content %}
 
-{% endblock content1 %}
-
-{% block content %}
+{% block content1 %}
 <div class="content-section">
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">{{ legend }}</legend>
             <div class="form-group">
-                {{ form.title.label(class="form-control-label") }}
-                {% if form.title.errors %}
-                    {{ form.title(class="form-control form-control-lg is-invalid") }}
+                {{ form.sum.label(class="form-control-label") }}
+                {% if form.sum.errors %}
+                    {{ form.sum(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.title.errors %}
+                        {% for error in form.sum.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.title(class="form-control form-control-lg") }}
+                    {{ form.sum(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+			<div class="form-group">
+                {{ form.interest.label(class="form-control-label") }}
+                {% if form.interest.errors %}
+                    {{ form.interest(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.interest.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.interest(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.date.label(class="form-control-label") }}
-                {% if form.date.errors %}
-                    {{ form.date(class="form-control form-control-lg is-invalid") }}
+                {{ form.payDate.label(class="form-control-label") }}
+                {% if form.payDate.errors %}
+                    {{ form.payDate(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.date.errors %}
+                        {% for error in form.payDate.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.date(class="form-control form-control-lg") }}
+                    {{ form.payDate(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
-                {{ form.content.label(class="form-control-label") }}
-                {% if form.content.errors %}
-                    {{ form.content(class="form-control form-control-lg is-invalid") }}
+                {{ form.description.label(class="form-control-label") }}
+                {% if form.description.errors %}
+                    {{ form.description(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.content.errors %}
+                        {% for error in form.description.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.content(class="form-control form-control-lg") }}
+                    {{ form.description(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
         </fieldset>
@@ -79,4 +94,4 @@
         </div>
     </form>
 </div>
-{% endblock content %}
+{% endblock content1 %}
