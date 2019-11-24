@@ -11,22 +11,33 @@ from flask import Flask
 from flask import request, render_template, jsonify
 import json
 
+# type 0 = document updatat
+# type 1 = plata completata
+# type 2 = bani ceruti
+# type 3 = postari totale
+def calculate_score(type):
+	if type is 0:
+		calculated_value = 20
+	elif type is 1:
+		calculated_value = 10
+	elif type is 2:
+		calculated_value = 0
+	elif type is 3:
+		calculated_value = -5
+		
+	return calculated_value
+	
 
 @app.route("/")
 @app.route("/home")
 def home():
-	posts = Post.query.all()
+	posts = Post.query.filter_by(financed=0)
 	return render_template('home.html', posts=posts)
 
 
 @app.route("/about")
 def about():
 	return render_template('about.html', title='About')
-
-
-@app.route('/calendar')
-def calendar():
-    return render_template("json.html")
 
 
 @app.route('/data')
@@ -42,8 +53,7 @@ def return_data():
         # you should use something else here than just plaintext
         # check out jsonfiy method or the built in json module
         return input_data.read()
-
-
+	
 @app.route("/register", methods=['GET', 'POST'])
 def register():
 	if current_user.is_authenticated:
@@ -105,6 +115,12 @@ def account():
 			current_user.image_file = picture_file
 		current_user.username = form.username.data
 		current_user.email = form.email.data
+		current_user.document = form.document.data
+		val = 0
+		if current_user.document:
+			current_user.doc_up += 1
+			val = calculate_score(0)
+		current_user.scor += val
 		db.session.commit()
 		flash('Your account has been updated!', 'success')
 		return redirect(url_for('account'))
@@ -112,8 +128,9 @@ def account():
 		form.username.data = current_user.username
 		form.email.data = current_user.email
 	image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+	posts = Post.query.filter_by(author=current_user)
 	return render_template('account.html', title='Account',
-						   image_file=image_file, form=form)
+						   image_file=image_file, form=form, posts=posts)
 
 def addJSON(title,desc,date):
 
@@ -128,22 +145,40 @@ def addJSON(title,desc,date):
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
+	if not current_user.scor:
+		flash('Not enough points for a new demand')
+		return redirect(url_for('home'))
 	form = PostForm()
 	if form.validate_on_submit():
-		post = Post(title=form.title.data, content=form.content.data, author=current_user, date=form.date.data)		
-		addJSON(form.title.data, form.content.data, form.date.data)
+		post = Post(sum=form.sum.data, payDate=form.payDate.data, author=current_user, interest=form.interest.data, description=form.description.data, financed = 0)		
+		#addJSON(form.sum.data, form.interest.data, form.payDate.data)
 		db.session.add(post)
-		db.session.commit()
-		flash('Your post has been created!', 'success')
+		current_user.post_no += 1
+		if current_user.scor is 0:
+			flash('Your score is 0. We do not trust you. Change something in your life ;)', 'error')
+			return redirect(url_for('home'))
+		elif current_user.post_no is 4:
+			flash('Your have more than 3 posts. Cataua achita datoriiaaa', 'error')
+			return redirect(url_for('home'))
+		else:
+			val = calculate_score(3)
+			current_user.scor += val
+			db.session.commit()
+			flash('Your post has been created!', 'success')
 		return redirect(url_for('home'))
 	return render_template('create_post.html', title='New Post',
 						   form=form, legend='New Post')
 
 
+@app.route("/post_account/<int:post_id>")
+def post_account(post_id):
+	post = Post.query.get_or_404(post_id)
+	return render_template('post_account.html', title=post.sum, post=post)
+	
 @app.route("/post/<int:post_id>")
 def post(post_id):
 	post = Post.query.get_or_404(post_id)
-	return render_template('post.html', title=post.title, post=post)
+	return render_template('post.html', title=post.sum, post=post)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -167,13 +202,26 @@ def update_post(post_id):
 						   form=form, legend='Update Post', Lat = lat, Lng = lng)
 
 
-@app.route("/post/<int:post_id>/delete", methods=['POST'])
+@app.route("/post/<int:post_id>/pay", methods=['POST'])
+@login_required
+def pay_post(post_id):
+	post = Post.query.get_or_404(post_id)
+	if current_user.type != 'Institution':
+		abort(403)
+	
+	post.financed = 1
+	db.session.commit()
+	flash('Payment has been transfered!', 'success')
+	return redirect(url_for('home'))
+
+@app.route("/post_account/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
 	post = Post.query.get_or_404(post_id)
 	if post.author != current_user:
 		abort(403)
+	
 	db.session.delete(post)
 	db.session.commit()
-	flash('Your post has been deleted!', 'success')
+	flash('Payment has been transfered!', 'success')
 	return redirect(url_for('home'))
