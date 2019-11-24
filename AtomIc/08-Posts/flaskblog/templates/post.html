@@ -7,7 +7,7 @@
 			<div class="description"> <p>{{post.description}}</p> </div>
 			<br>
 			<div class="sum-second"><strong>{{ post.sum }} lei</strong></div>
-			<div class="interest-second"> <strong> interest:{{post.interest}} </strong></div>
+			<div class="interest-second"> <strong> interest: {{post.interest}}% ({{postRevenue}}lei) </strong></div>
 			<br>
 		  </div>
 		</article>
@@ -19,9 +19,9 @@
       <div class="article-metadata">
         <a class="mr-2" href="#">{{ post.author.username }}</a>
         <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-        {% if post.author == current_user %}
+        {% if current_user.type == 'Investor' %}
           <div>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
+            
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Pay</button>
           </div>
         {% endif %}
@@ -35,14 +35,14 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="deleteModalLabel">Confirm payment?</h5>
+          <h5 class="modal-title" id="deleteModalLabel">Confirm payment of {{postMoney}} lei?</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-          <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+          <form action="{{ url_for('pay_post', post_id=post.id) }}" method="POST">
             <input class="btn btn-danger" type="submit" value="Yes">
           </form>
         </div>

@@ -16,9 +16,7 @@ class RegistrationForm(FlaskForm):
 	password = PasswordField('Password', validators=[DataRequired()])
 	confirm_password = PasswordField('Confirm Password',
 									 validators=[DataRequired(), EqualTo('password')])
-	ch = [('Volunteer','Volunteer'), ('Institution','Institution')]
-	type = SelectField('Account Type', choices = ch)
-	
+									 
 	ch = [('ron','RON'), ('eur','EURO'),('dollar','DOLLAR')]
 	place = SelectField('Select currency', choices = ch)
 	
@@ -55,9 +53,10 @@ class ClientInvestorButton(Form):
 class UpdateAccountForm(FlaskForm):
 	username = StringField('Username',
 						   validators=[DataRequired(), Length(min=2, max=20)])
-	email = StringField('Email',
-						validators=[DataRequired(), Email()])
+	balance = IntegerField('Add money')
 	picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+	ch = [('0','ID Card'), ('1','Income receipt'),('2','Contract')]
+	documentType = SelectField('Select document:', choices = ch)
 	document = FileField('Insert document', validators=[FileAllowed(['jpg', 'png'])])
 	submit = SubmitField('Update')
 

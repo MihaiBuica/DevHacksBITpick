@@ -8,13 +8,18 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
+.middle_align{
+  vertical-align: middle;
+  align-content: center;
+}
+
 .resizeLogo {
   max-width:20%;
   max-height:20%;
 }
 
 .bg-steel {
-  background-color: #82a94a;
+  background-color: #dfbc1e;
 }
 .left{
 	display: block;
@@ -23,8 +28,6 @@ h1, h2, h3, h4, h5, h6 {
 	width: 50%;
 	align: left;
 }
-
-
 .paydate{
 	padding-top:10px;
 	display:inline;
@@ -35,7 +38,12 @@ h1, h2, h3, h4, h5, h6 {
 .description{
 	border: 1px dotted  gray;
 }
-
+.estidebil{
+	color: red;
+}
+.estidebil2{
+	color: green;
+}
 .interest{
 	width:100%;
 	float:left;
@@ -63,7 +71,9 @@ h1, h2, h3, h4, h5, h6 {
 	color: #444444;
 }
 .site-header .navbar-nav .nav-link {
-  color: #505050;
+  
+  color: green;
+  font-weight: 600;
 }
 
 .site-header .navbar-nav .nav-link:hover {

@@ -23,6 +23,8 @@ class User(db.Model, UserMixin):
 	post_compl = db.Column(db.Integer, default=0)
 	doc_up = db.Column(db.Integer, default=0)
 	docs = db.Column(db.String(20), nullable=True)
+	balance = db.Column(db.Float, nullable=False)
+	is_admin = db.Column(db.Integer, default=0)
 	def __repr__(self):
 		return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
@@ -35,5 +37,9 @@ class Post(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 	payDate = db.Column(db.Date, nullable=False)
 	description = db.Column(db.Text)
+	financed = db.Column(db.Integer)
+	sponsor = db.Column(db.Integer, nullable=True)
+	paid = db.Column(db.Integer)
+
 	def __repr__(self):
 		return f"Post('{self.title}', '{self.date_posted}')"

@@ -10,6 +10,7 @@
 			  {% endfor %}
 			{% endif %}
 		  {% endwith %}
+		<center><h3>Active Posts</h3>    </center>     
 		{% for post in posts %}
 		<article class="media content-section">
 		  <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
@@ -17,6 +18,7 @@
 			<div class="article-metadata">
 			  <a class="mr-2" href="#">{{ post.author.username }}</a>
 			  <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+			  <b style="float:right;">TRUST: {{post.author.scor}}</b>
 			</div>
 			<div class="sum"><a class="article-sum" href="{{ url_for('post', post_id=post.id) }}"><strong>{{ post.sum }} lei</strong>	</a></div>
 			<div class="paydate"> <i>paydate: {{post.payDate}}</i></div>
@@ -28,9 +30,20 @@
 {% endblock content1 %}
 
 {% block content %}	
-            <h3>Menu</h3>
-              <ul class="list-group">
-				<li class="list-group-item list-group-item-light"><font color="red">WASTE ALERT!</font></li>
-                <li class="list-group-item list-group-item-light"><a href="post_id">Map</a></li>
-              </ul>
+		<center><h3>Top Users</h3>    </center>          
+			  
+		{% for user in users %}
+		{% if user.username != 'Admin'%}
+		{% if user.scor != 0%}
+		<article class="media content-section">
+		<div class="media-body">
+			<div class="article-metadata">
+			  <a class="mr-2" >{{ user.username }}</a>
+			  <b style="float:right;">TRUST: {{user.scor}}</b>
+			</div>			
+		</div>
+		</article>
+		{% endif %}
+		{% endif %}
+		{% endfor %}
 {% endblock content %}
